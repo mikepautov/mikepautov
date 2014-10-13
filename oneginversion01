@@ -1,0 +1,72 @@
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <io.h>
+#include <string.h>
+#include <malloc.h>
+
+int cmp_str(const void* str1, const void* str2)
+{
+
+    int len1 = strlen((*(char**)str1));
+    int len2 = strlen((*(char**)str2));
+    if (len1 == len2)
+    {
+        return 0;
+    }
+    if (len1 < len2)
+    {
+        return 1;
+    }
+    return -1;
+}
+
+int main()
+{
+    int size = 10;
+    int size_str = 10;
+    char buf = NULL;
+    int i = 0;
+    int index =0;
+    char ** poem = (char**)calloc(size, sizeof (char*));
+    char* buffer = (char*)calloc(size_str, 1);
+    FILE* file_in = fopen("onegin.txt","r");
+    FILE* file_out = fopen("onegin_sort.txt","w");
+
+    while ((buf = fgetc(file_in)) != EOF)
+    {
+        if (buf == '\n')
+        {
+            buffer[i] = 0;
+            poem[index] = (poem)calloc(strlen(buffer)+1,1);
+            strcpy(poem[index],buffer);
+            index++;
+            if (index == size -1)
+            {
+                size += 16;
+                poem = realloc(poem, size*sizeof (char*));
+            }
+            i = 0;
+            continue;
+        }
+        buffer[i++] = buf;
+        if (i == size_str-1)
+        {
+            size_str += 128;
+            buffer = realloc(buffer, size_str);
+        }
+    }
+    int j = 0;
+    free(buffer);
+    qsort(poem, index, sizeof(char*),cmp_str);
+    for (j =0; j<index;j++)
+    {
+        fprintf(file_out,"%s\n",poem[j]);
+        free(poem[j]);
+    }
+    free(poem);
+    fclose(file_in);
+    fclose(file_out);
+
+}
