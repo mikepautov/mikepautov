@@ -1,0 +1,113 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <assert.h>
+#include <malloc.h>
+struct stack_t
+    {
+     struct stack_t* mystack;                  //указатель на стек
+     char*           data;                //указатель на массив данных
+     int             size;                //счетчик
+     int             maxsize;
+    };
+
+stack_t* stack_ctor (int maxsize)
+
+    {
+     stack_t *mystack = (stack_t*) calloc (maxsize, sizeof(maxsize));
+
+     mystack -> data = (char*) calloc (maxsize,sizeof(maxsize));
+
+     if (mystack->data!=0)
+
+     {
+
+        mystack->maxsize = maxsize;
+
+        mystack->size = 0;
+      }
+
+     return (mystack);
+    }
+
+
+
+int stack_ok (const stack_t* mystack)
+
+    {
+
+        if (mystack == NULL)                   return -1;      //указатель на стэк нулевой
+
+        if (mystack -> data == NULL)           return -2;     //указатель на данные нулевой
+
+        if (mystack -> size < 0)               return -3;     //пара слов про размер стэка
+
+        if (mystack -> size >= mystack -> maxsize)  return -4;
+
+
+        return 0;
+
+    }
+
+int stack_dump (int stack_ok)
+    {
+        if (stack_ok == -1) printf (" INVALID POINTER ");
+
+        if (stack_ok == -2) printf (" DATA POINTER IS INVALID ");
+
+        if (stack_ok == -3) printf (" STACK SIZE IF AWFUL : NEGATIVE ");
+
+        if (stack_ok == -4) printf (" STACK SIZE > MAXSIZE ");
+
+
+     return 0;
+     }
+
+int  stack_push (stack_t* mystack, int value)
+
+    {
+        //if (stack_ok(mystack))  {stack_dump(stack_ok(mystack)); assert(0) ;}  ;
+
+        mystack -> data[++mystack -> size] = value;
+
+        printf ("%d", mystack -> data[mystack -> size]);
+
+
+        //if (stack_ok(mystack))  stack_dump(stack_ok(mystack));
+
+        return 0;
+     }
+
+int  stack_pop (stack_t* mystack)                    //ща будем выводить
+
+     {
+        if (stack_ok(mystack))  {stack_dump(stack_ok(mystack)); assert(0) ;}  ;
+
+        return ("%d",(mystack -> data[--mystack -> size]));
+
+
+        if (stack_ok(mystack))  {stack_dump(stack_ok(mystack)); assert(0) ;}  ;
+     }
+
+int stack_dtor (stack_t* mystack)
+
+    {
+     free (mystack->data);
+     return 0;
+    }
+
+int main()
+
+{   /*int maxsize;
+    printf("Set stack maxsise\n");
+    scanf("%d", &maxsize);
+    stack_ctor (maxsize);
+    stack_push (stack_ctor (maxsize),  4);
+
+    stack_pop  (stack_ctor (maxsize));
+    stack_dtor (stack_ctor (maxsize));*/
+
+
+    return 0;
+}
+
+
